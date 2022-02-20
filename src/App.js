@@ -1,14 +1,14 @@
 import React from 'react'
 import "./App.css";
 import {Switch, Route, Redirect} from 'react-router-dom'
+import {connect} from 'react-redux'
 
 import  Homepage from './pages/homepage/homepage.component.jsx'
 import  shopPage from './pages/shop/shop.component.jsx'
 import Header from './components/header/header.component.jsx'
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 import {auth, createUserProfileDocument} from './firebase/firebase.utils'
-import {connect} from 'react-redux'
-import { setCurrentUser} from './redux/user/user.actions'
+import {setCurrentUser} from './redux/user/user.actions'
 class App extends React.Component {
 
  
@@ -20,7 +20,6 @@ class App extends React.Component {
       
       if(userAuth) {
         const userRef = await createUserProfileDocument(userAuth)
-        console.log(userRef)
         userRef.onSnapshot(snapshot => {
          setCurrentUser({
               id: snapshot.id,
@@ -58,9 +57,10 @@ class App extends React.Component {
   
 }
 
-const mapStateToProps = ({user}) => ({
-  currentUser: user.currentUser
+const mapStateToProps = (state) => ({
+  currentUser: state.user.currentUser
 })
+
 const mapDispatchToProps = dispatch => ({
      setCurrentUser: user => dispatch(setCurrentUser(user))
 })
