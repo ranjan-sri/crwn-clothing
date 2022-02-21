@@ -3,12 +3,20 @@ import "./App.css";
 import {Switch, Route, Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
 
+import { selectCurrentUser } from './redux/user/user.selectors'
+import {createStructuredSelector} from 'reselect'
+
+
+import {auth, createUserProfileDocument} from './firebase/firebase.utils'
+import { setCurrentUser } from './redux/user/user.actions';
+
+//Import components
 import  Homepage from './pages/homepage/homepage.component.jsx'
 import  shopPage from './pages/shop/shop.component.jsx'
 import Header from './components/header/header.component.jsx'
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
-import {auth, createUserProfileDocument} from './firebase/firebase.utils'
-import {setCurrentUser} from './redux/user/user.actions'
+import CheckoutPage from './pages/checkout/checkout.component';
+
 class App extends React.Component {
 
  
@@ -48,10 +56,14 @@ class App extends React.Component {
         <Switch>
           <Route exact path='/' component={Homepage}/>
           <Route exact path='/shop' component={shopPage}/>
-          <Route exact path='/signin' 
+          <Route exact path='/checkout' component={CheckoutPage}/>
+          <Route exact 
+                 path='/signin' 
                  render={() => 
-                         this.props.currentUser ? (
-                         <Redirect to='/' />) : <SignInAndSignUpPage/>}   />
+                         this.props.currentUser 
+                         ? (<Redirect to='/' />) 
+                         : <SignInAndSignUpPage/>}   
+          />
         </Switch>
       </div>
     ) 
@@ -59,13 +71,14 @@ class App extends React.Component {
   
 }
 
-const mapStateToProps = (state) => ({
-  currentUser: state.user.currentUser
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser
 })
 
 const mapDispatchToProps = dispatch => ({
-     setCurrentUser: user => dispatch(setCurrentUser(user))
+  setCurrentUser: user => dispatch(setCurrentUser(user))
 })
+
 
 export default connect(
                 mapStateToProps, 
