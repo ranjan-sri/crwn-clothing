@@ -10,7 +10,7 @@ const StripeCheckoutButton = ({price}) => {
         alert('Payment Succesful')
     }
     return (
-        <StripeCheckout
+        <StripeCheckoutButton
           label = 'Pay now'
           name='CRWN Clothing Ltd.'
           billingAddress
@@ -23,7 +23,7 @@ const StripeCheckoutButton = ({price}) => {
           stripeKey={publishableKey}
         >
 
-        </StripeCheckout>
+        </StripeCheckoutButton>
     )
 
 }
